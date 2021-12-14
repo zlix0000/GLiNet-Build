@@ -68,7 +68,7 @@ jobs:
     - name: Compile the firmware
       id: compile
       run: |
-        cd openwrt/openwrt-18.06
+        cd openwrt/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
         ./scripts/gen_config.py target_siflower_gl-sft1200
         #make feeds/kenzo/luci-app-ssr-plus/compile V=s
