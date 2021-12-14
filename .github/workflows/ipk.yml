@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/monw/gl-infra-builder.git
+  REPO_URL: https://github.com/monw/gl-infra-builder
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -50,7 +50,6 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         python3 setup.py -c config-siflower-18.x.yml
-        cd openwrt-18.06
    
     #- name: Update feeds
       #run: cd openwrt/openwrt-18.06 && ./scripts/feeds update -a
