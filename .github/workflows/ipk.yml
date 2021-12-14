@@ -71,8 +71,8 @@ jobs:
         cd openwrt/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
         sudo cp .config.sft1200 .config
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
+        #./scripts/feeds update -a
+        #./scripts/feeds install -a
         make V=s
         #make feeds/kenzo/luci-app-ssr-plus/compile V=s
         echo "::set-output name=status::success"
