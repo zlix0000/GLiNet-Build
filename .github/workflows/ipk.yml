@@ -12,8 +12,8 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/zheshifandian/gl-1806_SDK
-  REPO_BRANCH: release
+  REPO_URL: https://github.com/zheshifandian/gl-infra-builder
+  REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   UPLOAD_BIN_DIR: true
@@ -47,26 +47,27 @@ jobs:
         #cd openwrt
         #python3 setup.py -c config-siflower-18.x.yml
    
-    - name: Update feeds
-      run: cd openwrt/openwrt-18.06 && ./scripts/feeds update -a
+    #- name: Update feeds
+      #run: cd openwrt/openwrt-18.06 && ./scripts/feeds update -a
 
-    - name: Install feeds
-      run: cd openwrt/openwrt-18.06 && ./scripts/feeds install -a
-    - name: Download package
-      id: package
-      run: |
-        cd openwrt/openwrt-18.06
-        make defconfig
-        make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
+    #- name: Install feeds
+     # run: cd openwrt/openwrt-18.06 && ./scripts/feeds install -a
+   # - name: Download package
+     # id: package
+      #run: |
+       # cd openwrt/openwrt-18.06
+        #make defconfig
+        #make download -j8
+       # find dl -size -1024c -exec ls -l {} \;
+        #find dl -size -1024c -exec rm -f {} \;
 
     - name: Compile the firmware
       id: compile
       run: |
-        cd openwrt/openwrt-18.06
+        cd openwrt/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
-        cp .config.sft1200 .config
+        ./scripts/gen_config.py target_siflower_gl-sft1200
+        #cp .config.sft1200 .config
         #./scripts/feeds update -a
         #./scripts/feeds install -a
         make V=s
