@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/gl-inet/gl-infra-builder
+  REPO_URL: https://github.com/zhenshifandian/gl-infra-builder
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -68,10 +68,10 @@ jobs:
       run: |
         cd gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
-        ./scripts/gen_config.py target_siflower_gl-sft1200
-        #cp .config.sft1200 .config
-        #./scripts/feeds update -a
-        #./scripts/feeds install -a
+        #./scripts/gen_config.py target_siflower_gl-sft1200
+        cp .config.sft1200 .config
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
         make V=s
         #make package/pkg/luci-app-uugamebooster/compile V=s
         echo "::set-output name=status::success"
