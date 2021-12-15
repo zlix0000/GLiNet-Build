@@ -12,8 +12,8 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/Siflower/1806_SDK
-  REPO_BRANCH: release
+  REPO_URL: https://github.com/zhenshifandian/gl-infra-builder
+  REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   UPLOAD_BIN_DIR: true
@@ -44,9 +44,9 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        cd openwrt/openwrt-18.06/package
-        git clone https://github.com/liuran001/openwrt-packages pkg
-        #sudo python3 setup.py -c config-siflower-18.x.yml
+        #cd openwrt/openwrt-18.06/package
+        #git clone https://github.com/liuran001/openwrt-packages pkg
+        python3 setup.py -c config-siflower-18.x.yml
    
     #- name: Update feeds
       #run: cd openwrt/openwrt-18.06 && ./scripts/feeds update -a
@@ -65,14 +65,14 @@ jobs:
     - name: Compile the firmware
       id: compile
       run: |
-        cd openwrt/openwrt-18.06
+        cd openwrt/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
-        #sudo ./scripts/gen_config.py target_siflower_gl-sft1200
-        #cp .config.sft1200 .config
+        ./scripts/gen_config.py target_siflower_gl-sft1200
+        cp .config.sft1200 .config
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        #make V=s
-        make package/pkg/luci-app-uugamebooster/compile V=s
+        make V=s
+        #make package/pkg/luci-app-uugamebooster/compile V=s
         echo "::set-output name=status::success"
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
@@ -86,7 +86,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/openwrt-18.06/bin
+        path: openwrt/openwrt-18.06/siflower/openwrt-18.06/bin
 
     - name: Organize files
       id: organize
