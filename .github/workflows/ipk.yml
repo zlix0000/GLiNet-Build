@@ -69,7 +69,7 @@ jobs:
         cd gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
         ./scripts/gen_config.py target_siflower_gl-sft1200
-        cp .config.sft1200 .config
+        #cp .config.sft1200 .config
         #./scripts/feeds update -a
         #./scripts/feeds install -a
         make V=s
