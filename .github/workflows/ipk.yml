@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/monw/gl-1806_SDK
+  REPO_URL: https://github.com/Siflower/1806_SDK
   REPO_BRANCH: release
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
