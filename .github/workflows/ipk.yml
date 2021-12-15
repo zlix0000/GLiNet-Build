@@ -87,13 +87,13 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/openwrt-18.06/siflower/openwrt-18.06/bin
+        path: gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06/bin
 
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/openwrt-18.06/bin/targets/*/*
+        cd gl-infra-builder/openwrt-18.06/bin/targets/*/*
         #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
