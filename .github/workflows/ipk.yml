@@ -43,7 +43,6 @@ jobs:
           /etc/mysql \
           /etc/php
         sudo -E apt-get -y purge \
-          azure-cli \
           ghc* \
           zulu* \
           hhvm \
