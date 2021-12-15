@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/gl-inet/gl-infra-builder
+  REPO_URL: https://github.com/zheshifandian/gl-infra-builder
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -25,7 +25,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
@@ -66,7 +66,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH
         cd gl-infra-builder
         #git clone https://github.com/liuran001/openwrt-packages pkg
-        sudo python3 setup.py -c config-siflower-18.x.yml
+        python3 setup.py -c config-siflower-18.x.yml
         #cd .. && sudo chown $USER:$GROUPS gl-infra-builder
    
     #- name: Update feeds
@@ -89,11 +89,11 @@ jobs:
         cd gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
         #./scripts/gen_config.py list
-        sudo ./scripts/gen_config.py target_siflower_gl-sft1200
+        ./scripts/gen_config.py target_siflower_gl-sft1200
         #cp .config.sft1200 .config
         #./scripts/feeds update -a
         #./scripts/feeds install -a
-        sudo make V=s
+        make V=s
         #make package/pkg/luci-app-uugamebooster/compile V=s
         echo "::set-output name=status::success"
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
