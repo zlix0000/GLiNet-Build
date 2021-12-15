@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/zhenshifandian/gl-infra-builder
+  REPO_URL: https://github.com/zheshifandian/gl-infra-builder
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -44,7 +44,7 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        #cd openwrt/openwrt-18.06/package
+        cd openwrt
         #git clone https://github.com/liuran001/openwrt-packages pkg
         python3 setup.py -c config-siflower-18.x.yml
    
@@ -93,7 +93,7 @@ jobs:
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
         cd openwrt/openwrt-18.06/bin/targets/*/*
-        rm -rf packages
+        #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
     - name: Upload firmware directory
