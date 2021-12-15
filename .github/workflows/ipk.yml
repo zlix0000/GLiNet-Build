@@ -46,7 +46,8 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH
         cd gl-infra-builder
         #git clone https://github.com/liuran001/openwrt-packages pkg
-        python3 setup.py -c config-siflower-18.x.yml
+        sudo python3 setup.py -c config-siflower-18.x.yml
+        cd .. && sudo chown $USER:$GROUPS gl-infra-builder
    
     #- name: Update feeds
       #run: cd openwrt/openwrt-18.06 && ./scripts/feeds update -a
