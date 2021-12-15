@@ -43,8 +43,8 @@ jobs:
     - name: Clone source code
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        cd openwrt
+        git clone $REPO_URL -b $REPO_BRANCH
+        cd gl-infra-builder
         #git clone https://github.com/liuran001/openwrt-packages pkg
         python3 setup.py -c config-siflower-18.x.yml
    
@@ -65,7 +65,7 @@ jobs:
     - name: Compile the firmware
       id: compile
       run: |
-        cd openwrt/openwrt-18.06/siflower/openwrt-18.06
+        cd gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06
         echo -e "$(nproc) thread compile"
         ./scripts/gen_config.py target_siflower_gl-sft1200
         cp .config.sft1200 .config
