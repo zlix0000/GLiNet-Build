@@ -70,8 +70,8 @@ jobs:
         echo -e "$(nproc) thread compile"
         ./scripts/gen_config.py target_siflower_gl-sft1200
         cp .config.sft1200 .config
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
+        #./scripts/feeds update -a
+        #./scripts/feeds install -a
         make V=s
         #make package/pkg/luci-app-uugamebooster/compile V=s
         echo "::set-output name=status::success"
