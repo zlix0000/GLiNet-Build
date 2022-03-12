@@ -14,11 +14,8 @@ on:
 env:
   REPO_URL: https://github.com/monw/gl-infra-builder
   REPO_BRANCH: main
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
@@ -38,11 +35,10 @@ jobs:
       run: |
         docker rmi `docker images -q`
         echo "Deleting files, please wait ..."
-        sudo apt update -y
-        sudo apt full-upgrade -y
-        sudo apt install -y  build-essential libncurses5-dev gawk git libssl-dev gettext zlib1g-dev swig unzip time rsync python3 python3-setuptools python3-yaml
+        sudo apt install -y build-essential libncurses5-dev gawk git libssl-dev gettext zlib1g-dev swig unzip time rsync python3 python3-setuptools python3-yaml
         sudo timedatectl set-timezone "$TZ"
-        python3 --version
+        git config --global user.email "240038901@qq.com"
+        git config --global user.name "monw"
 
     - name: Clone source code and building rom
       run: |
@@ -52,11 +48,7 @@ jobs:
         python3 setup.py -c config-wlan-ap.yml
         cd wlan-ap/openwrt
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
-        make -j8 V=s
-   
-    - name: Check space usage
-      if: (!cancelled())
-      run: df -hT
+        make -j8 V=s   
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
@@ -73,6 +65,7 @@ jobs:
         #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
+        
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
@@ -88,6 +81,7 @@ jobs:
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
+        
     - name: Generate release tag
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
