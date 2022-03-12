@@ -45,7 +45,7 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH
         cd gl-infra-builder/feeds/glinet
-        git clone https://github.com/liuran001/openwrt-packages
+        git clone --depth=1 https://github.com/liuran001/openwrt-packages
         git clone https://github.com/harryzwh/luci-app-zerotier
         cd .. && cd ..
         python3 setup.py -c config-wlan-ap.yml
