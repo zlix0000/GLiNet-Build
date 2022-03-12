@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/zheshifandian/gl-infra-builder
+  REPO_URL: https://github.com/monw/gl-infra-builder
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -25,7 +25,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
@@ -40,49 +40,20 @@ jobs:
         echo "Deleting files, please wait ..."
         sudo apt update -y
         sudo apt full-upgrade -y
-        sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler ecj fastjar flex gawk gettext gcc-multilib g++-multilib git git-core gperf haveged help2man intltool lib32gcc1 libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncurses5-dev libreadline-dev libssl-dev libtool libz-dev lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pip python3-ply python-docutils qemu-utils re2c rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+        sudo apt install -y  build-essential libncurses5-dev gawk git libssl-dev gettext zlib1g-dev swig unzip time rsync python3 python3-setuptools python3-yaml
         sudo timedatectl set-timezone "$TZ"
         python3 --version
 
-    - name: Clone source code
+    - name: Clone source code and building rom
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH
-        cd gl-infra-builder
-        #git clone https://github.com/liuran001/openwrt-packages pkg
-        python3 setup.py -c config-siflower-18.x.yml
-        #cd .. && sudo chown $USER:$GROUPS gl-infra-builder
+        cd gl-infra-builder        
+        python3 setup.py -c config-wlan-ap.yml
+        cd wlan-ap/openwrt
+        ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
+        make -j8 V=s
    
-    #- name: Update feeds
-      #run: cd openwrt/openwrt-18.06 && ./scripts/feeds update -a
-
-    #- name: Install feeds
-     # run: cd openwrt/openwrt-18.06 && ./scripts/feeds install -a
-   # - name: Download package
-     # id: package
-      #run: |
-       # cd openwrt/openwrt-18.06
-        #make defconfig
-        #make download -j8
-       # find dl -size -1024c -exec ls -l {} \;
-        #find dl -size -1024c -exec rm -f {} \;
-
-    - name: Compile the firmware
-      id: compile
-      run: |
-        cd gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06
-        echo -e "$(nproc) thread compile"
-        #./scripts/gen_config.py list
-        ./scripts/gen_config.py target_siflower_gl-sft1200
-        #cp .config.sft1200 .config
-        #./scripts/feeds update -a
-        #./scripts/feeds install -a
-        make V=s
-        #make package/pkg/luci-app-uugamebooster/compile V=s
-        echo "::set-output name=status::success"
-        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-        [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
     - name: Check space usage
       if: (!cancelled())
       run: df -hT
@@ -92,13 +63,13 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: gl-infra-builder/openwrt-18.06/siflower/openwrt-18.06/bin
+        path: gl-infra-builder/wlan-ap/openwrt/bin
 
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd gl-infra-builder/openwrt-18.06/bin/targets/*/*
+        cd gl-infra-builder/wlan-ap/openwrt/bin/targets/*/*
         #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
@@ -108,15 +79,7 @@ jobs:
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
-
-    - name: Upload firmware to cowtransfer
-      id: cowtransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+    
     - name: Upload firmware to WeTransfer
       id: wetransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
