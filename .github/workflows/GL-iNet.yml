@@ -44,11 +44,11 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH
-        cd gl-infra-builder        
+        cd gl-infra-builder
         python3 setup.py -c config-wlan-ap.yml
         cd wlan-ap/openwrt
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
-        make -j8 V=s   
+        make V=s   
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
