@@ -57,8 +57,8 @@ jobs:
         cd wlan-ap/openwrt
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/ucl tools/ucl
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx tools/upx
-        sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' "$openwrt/tools/Makefile"
-        sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' "$openwrt/tools/Makefile"
+        sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' tools/Makefile
+        sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' tools/Makefile
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 openwrt_common
         echo "CONFIG_NF_CT_NETLINK_HELPER=n" >> .config
         echo -e "$(nproc) thread compile"
