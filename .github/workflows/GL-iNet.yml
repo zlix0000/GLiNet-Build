@@ -48,16 +48,17 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH
         cd gl-infra-builder/feeds/glinet
         git clone --depth=1 https://github.com/liuran001/openwrt-packages
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-accesscontrol   "$openwrt/feeds/luci/applications/luci-app-accesscontrol"
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier  "$openwrt/feeds/luci/applications/luci-app-zerotier"
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-ramfree   "$openwrt/feeds/luci/applications/luci-app-accesscontrol"
-        svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/ucl "$openwrt/tools/ucl"
-        svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx "$openwrt/tools/upx"
-        sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' "$openwrt/tools/Makefile"
-        sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' "$openwrt/tools/Makefile"
+        rm -rf luci-app-zerotier
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-accesscontrol
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-ramfree
         cd .. && cd ..
         python3 setup.py -c config-wlan-ap.yml
         cd wlan-ap/openwrt
+        svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/ucl tools/ucl
+        svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx tools/upx
+        sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' "$openwrt/tools/Makefile"
+        sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' "$openwrt/tools/Makefile"
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 openwrt_common
         echo "CONFIG_NF_CT_NETLINK_HELPER=n" >> .config
         echo -e "$(nproc) thread compile"
