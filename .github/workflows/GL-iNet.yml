@@ -53,7 +53,7 @@ jobs:
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 openwrt_common
         echo "CONFIG_NF_CT_NETLINK_HELPER=y" >> .config
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) V=99
+        make -j$(nproc)
         
     - name: Organize files
       id: organize
