@@ -13,7 +13,7 @@ on:
 
 env:
   REPO_URL: https://github.com/monw/gl-infra-builder
-  REPO_BRANCH: official
+  REPO_BRANCH: main
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_WETRANSFER: true
@@ -53,7 +53,9 @@ jobs:
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx tools/upx
         sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' tools/Makefile
         sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' tools/Makefile        
-        sed -i '/#src-link custom \/usr\/src\/openwrt\/custom-feed/a src-git liuran001_packages https:\/\/github.com\/liuran001\/openwrt-packages' feeds.conf.default
+        #sed -i '/#src-link custom \/usr\/src\/openwrt\/custom-feed/a src-git liuran001_packages https:\/\/github.com\/liuran001\/openwrt-packages' feeds.conf.default
+        sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+        sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 || make -j1 V=s
