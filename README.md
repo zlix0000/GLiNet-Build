@@ -1,2 +1,1 @@
-# sft1200-build
-sft-1200 ipk build
+项目用于编译gl•inet AX1800和AXT1800开源固件。
