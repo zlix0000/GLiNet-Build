@@ -13,7 +13,7 @@ on:
 
 env:
   REPO_URL: https://github.com/monw/gl-infra-builder ##可以改成自己的仓库
-  REPO_BRANCH: main
+  REPO_BRANCH: stable
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_WETRANSFER: true
@@ -59,7 +59,7 @@ jobs:
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='R22.3.15'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_DESCRIPTION='OpenWrt '" >> package/base-files/files/etc/openwrt_release
+        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 '" >> package/base-files/files/etc/openwrt_release
         sed -i 's/192.168.1.1/192.168.8.1/' package/base-files/files/bin/config_generate
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci-ssr
         echo -e "$(nproc) thread compile" ##action一般是二线程，所以比较慢些
