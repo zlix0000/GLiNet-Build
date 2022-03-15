@@ -13,7 +13,7 @@ on:
 
 env:
   REPO_URL: https://github.com/monw/gl-infra-builder ##可以改成自己的仓库
-  REPO_BRANCH: stable
+  REPO_BRANCH: main
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_WETRANSFER: true
