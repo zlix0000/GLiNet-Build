@@ -55,8 +55,7 @@ jobs:
         sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' tools/Makefile        
         sed -i '$a src-git liuran001_packages https://github.com/liuran001/openwrt-packages' feeds.conf.default ##添加liuran001源
         #sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default ##添加kenzok8源，与上条源只选一种
-        #sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default ##添加kenzok8源
-        rm -rf feeds/liuran001_packages/luci-theme-argon
+        #sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default ##添加kenzok8源        
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='R22.3.15'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
@@ -69,6 +68,7 @@ jobs:
         svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier luci-app-zerotier
         cd ..
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci-ssr
+        rm -rf feeds/liuran001_packages/luci-theme-argon
         echo -e "$(nproc) thread compile" ##action一般是二线程，所以比较慢些
         make -j$(nproc) || make -j1 || make -j1 V=s
         
