@@ -53,9 +53,10 @@ jobs:
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx tools/upx
         sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' tools/Makefile
         sed -i '/$(curdir)\/bison\/compile := $(curdir)\/flex\/compile/a $(curdir)\/upx\/compile := $(curdir)\/ucl\/compile' tools/Makefile        
-        #sed -i '$a src-git liuran001_packages https://github.com/liuran001/openwrt-packages' feeds.conf.default ##添加liuran001源
-        sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default ##添加kenzok8源，与上条源只选一种
-        sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default ##添加kenzok8源
+        sed -i '$a src-git liuran001_packages https://github.com/liuran001/openwrt-packages' feeds.conf.default ##添加liuran001源
+        #sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default ##添加kenzok8源，与上条源只选一种
+        #sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default ##添加kenzok8源
+        rm -rf feeds/liuran001_packages/luci-theme-argon
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='R22.3.15'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
@@ -63,9 +64,9 @@ jobs:
         sed -i 's/192.168.1.1/192.168.8.1/' package/base-files/files/bin/config_generate
         cd package
         git clone https://github.com/jerrykuku/luci-theme-argon.git
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-accesscontrol
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-ramfree
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-accesscontrol luci-app-accesscontrol
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-ramfree luci-app-ramfree
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier luci-app-zerotier
         cd ..
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci-ssr
         echo -e "$(nproc) thread compile" ##action一般是二线程，所以比较慢些
