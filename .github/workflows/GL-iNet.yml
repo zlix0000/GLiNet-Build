@@ -34,9 +34,9 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
+        #sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+        #sudo -E apt-get -qq autoremove --purge
+        #sudo -E apt-get -qq clean
         sudo apt install -y build-essential libncurses5-dev gawk git libssl-dev gettext zlib1g-dev swig unzip time rsync python3 python3-setuptools python3-yaml
         sudo timedatectl set-timezone "$TZ"
         git config --global user.email "240038901@qq.com"  ##修改成自己的GitHub注册邮箱地址
