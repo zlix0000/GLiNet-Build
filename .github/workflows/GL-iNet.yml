@@ -63,13 +63,15 @@ jobs:
         sed -i 's/192.168.1.1/192.168.8.1/' package/base-files/files/bin/config_generate
         cd package
         git clone https://github.com/jerrykuku/luci-theme-argon.git
-        #svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-accesscontrol luci-app-accesscontrol
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-ramfree luci-app-ramfree
-        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier luci-app-zerotier
-        svn co https://github.com/coolsnowwolf/packages/trunk/net/zerotier zerotier
+        svn co https://github.com/coolsnowwolf/packages/trunk/net/zerotier net/zerotier
         cd ..
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
         rm -rf feeds/liuran001_packages/luci-theme-argon
+        #svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-accesscontrol feeds/luci/applications/luci-app-accesscontrol
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-ramfree feeds/luci/applications/luci-app-ramfree
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-zerotier feeds/luci/applications/luci-app-zerotier
+        ./scripts/feeds update luci-app-zerotier luci-app-ramfree
+        ./scripts/feeds install luci-app-zerotier luci-app-ramfree
         echo -e "$(nproc) thread compile" ##action一般是二线程，所以比较慢些
         make -j$(nproc) || make -j1 || make -j1 V=s
         
