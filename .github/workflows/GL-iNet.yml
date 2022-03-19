@@ -63,7 +63,7 @@ jobs:
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='GL-iNet Inc'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.3.17 '" >> package/base-files/files/etc/openwrt_release
+        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.3.19 '" >> package/base-files/files/etc/openwrt_release
         sed -i 's/192.168.1.1/192.168.8.1/' package/base-files/files/bin/config_generate
         sed -i 's/OpenWrt/AX1800/' package/base-files/files/bin/config_generate
         sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
@@ -71,7 +71,7 @@ jobs:
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         cd ..
         ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
-        #sed -i ​'​/set wireless.radio${devidx}.disabled/d​'​ package/kernel/mac80211/files/lib/wifi/mac80211.sh   ##默认开启WIFI
+        sed -i '/set wireless.radio${devidx}.disabled/d' package/kernel/mac80211/files/lib/wifi/mac80211.sh   ##默认开启WIFI
         sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile  ##更换默认主题
         #rm -rf feeds/liuran001_packages/luci-theme-argon
         echo -e "$(nproc) thread compile" ##action一般是二线程，所以比较慢些
