@@ -63,8 +63,8 @@ jobs:
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='GL-iNet Inc'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.3.19 '" >> package/base-files/files/etc/openwrt_release
-        sed -i 's/192.168.1.1/192.168.8.1/' package/base-files/files/bin/config_generate
+        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.3.29 '" >> package/base-files/files/etc/openwrt_release
+        sed -i 's/192.168.1.1/192.168.88.1/' package/base-files/files/bin/config_generate
         sed -i 's/OpenWrt/AX1800/' package/base-files/files/bin/config_generate
         sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
         cd package
