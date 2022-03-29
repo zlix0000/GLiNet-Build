@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/monw/wlan-ap ##可以改成自己的仓库
+  REPO_URL: https://github.com/Telecominfraproject/wlan-ap ##可以改成自己的仓库
   REPO_BRANCH: next
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
