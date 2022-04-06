@@ -13,7 +13,7 @@ on:
 
 env:
   REPO_URL: https://github.com/Telecominfraproject/wlan-ap ##可以改成自己的仓库
-  REPO_BRANCH: next
+  REPO_BRANCH: main
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_WETRANSFER: true
@@ -60,12 +60,12 @@ jobs:
         #sed -i '$a src-git liuran001_packages https://github.com/liuran001/openwrt-packages' feeds.conf.default ##添加liuran001源
         #sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default ##添加kenzok8源，与上条源只选一种
         #sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default ##添加kenzok8源        
-        sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_REVISION='GL-iNet Inc'" >> package/base-files/files/etc/openwrt_release
-        sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.4.1 '" >> package/base-files/files/etc/openwrt_release
-        sed -i 's/192.168.1.1/192.168.88.1/' package/base-files/files/bin/config_generate
-        sed -i 's/OpenWrt/AX1800/' package/base-files/files/bin/config_generate
+        #sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
+        #echo "DISTRIB_REVISION='GL-iNet Inc'" >> package/base-files/files/etc/openwrt_release
+        #sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
+        #echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.4.1 '" >> package/base-files/files/etc/openwrt_release
+        #sed -i 's/192.168.1.1/192.168.88.1/' package/base-files/files/bin/config_generate
+        #sed -i 's/OpenWrt/AX1800/' package/base-files/files/bin/config_generate
         #sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
         #sed -i '/wireless.radio${devidx}.disabled/d' package/kernel/mac80211/files/lib/wifi/mac80211.sh   ##默认开启WIFI
         #sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile  ##更换默认主题
