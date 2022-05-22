@@ -1,4 +1,4 @@
-name: Build OpenWrt
+name: Build axt1800
 
 on:
   watch:
@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  REPO_URL: https://github.com/monw/gl-infra-builder ##可以改成自己的仓库
+  REPO_URL: https://github.com/monw/wlan-ap ##可以改成自己的仓库
   REPO_BRANCH: main
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
@@ -46,13 +46,13 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH
-        cd gl-infra-builder
+        cd wlan-ap
         #svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-accesscontrol feeds/glinet/luci-app-accesscontrol
         svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-ramfree feeds/glinet/luci-app-ramfree
         svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-zerotier feeds/glinet/luci-app-zerotier
         svn co https://github.com/coolsnowwolf/packages/trunk/net/zerotier feeds/glinet/zerotier
-        python3 setup.py -c config-wlan-ap.yml
-        cd wlan-ap/openwrt
+        ./setup.py --setup
+        cd openwrt
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/ucl tools/ucl
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx tools/upx
         sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' tools/Makefile
@@ -63,14 +63,14 @@ jobs:
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='GL-iNet Inc'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.3.31 '" >> package/base-files/files/etc/openwrt_release
+        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.5.22 '" >> package/base-files/files/etc/openwrt_release
         sed -i 's/192.168.1.1/192.168.88.1/' package/base-files/files/bin/config_generate
-        sed -i 's/OpenWrt/AX1800/' package/base-files/files/bin/config_generate
-        sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
+        sed -i 's/OpenWrt/AXT1800/' package/base-files/files/bin/config_generate
+        #sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
         cd package
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         cd ..
-        ./scripts/gen_config.py target_wlan_ap-gl-ax1800 luci
+        ./scripts/gen_config.py glinet_axt1800
         #sed -i '/set wireless.radio${devidx}.disabled/d' package/kernel/mac80211/files/lib/wifi/mac80211.sh   ##默认开启WIFI
         #sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile  ##更换默认主题
         #rm -rf feeds/liuran001_packages/luci-theme-argon
@@ -81,8 +81,8 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd gl-infra-builder/wlan-ap/openwrt/bin/targets/*/*
-        rm -rf packages
+        cd wlan-ap/openwrt/bin/targets/*/*
+        #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
         
