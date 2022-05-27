@@ -52,7 +52,7 @@ jobs:
         svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-zerotier feeds/glinet/luci-app-zerotier
         svn co https://github.com/coolsnowwolf/packages/trunk/net/zerotier feeds/glinet/zerotier
         python3 setup.py -c config-wlan-ap-5.4.yml
-        cd openwrt
+        cd wlan-ap/openwrt
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/ucl tools/ucl
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/upx tools/upx
         sed -i '/tools-y += patchelf pkgconf quilt squashfskit4 sstrip zip zlib zstd/a tools-y += ucl upx' tools/Makefile
@@ -81,7 +81,7 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd gl-infra-builder/openwrt/bin
+        cd gl-infra-builder/wlan-ap/openwrt/bin
         #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
