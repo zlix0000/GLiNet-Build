@@ -63,7 +63,7 @@ jobs:
         sed -i '/DISTRIB_REVISION/d' package/base-files/files/etc/openwrt_release
         echo "DISTRIB_REVISION='GL-iNet Inc'" >> package/base-files/files/etc/openwrt_release
         sed -i '/DISTRIB_DESCRIPTION/d' package/base-files/files/etc/openwrt_release
-        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.5.28 '" >> package/base-files/files/etc/openwrt_release
+        echo "DISTRIB_DESCRIPTION='OpenWrt-21.02 R22.6.18 '" >> package/base-files/files/etc/openwrt_release
         sed -i 's/192.168.1.1/192.168.88.1/' package/base-files/files/bin/config_generate
         sed -i 's/OpenWrt/AXT1800/' package/base-files/files/bin/config_generate
         #sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
@@ -81,8 +81,8 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd gl-infra-builder/wlan-ap/openwrt/bin
-        #rm -rf packages
+        cd gl-infra-builder/wlan-ap/openwrt/bin/targets/*/*
+        rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
         
@@ -112,13 +112,13 @@ jobs:
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
         
-    #- name: Upload firmware to release
-     # uses: softprops/action-gh-release@v1
-     # if: steps.tag.outputs.status == 'success' && !cancelled()
-      #env:
-      #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     # with:
-       # tag_name: ${{ steps.tag.outputs.release_tag }}
-       # body_path: release.txt
-      #  files: ${{ env.FIRMWARE }}/*
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v1
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        body_path: release.txt
+        files: ${{ env.FIRMWARE }}/*
 
