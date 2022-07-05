@@ -39,11 +39,11 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH
         cd gl-infra-builder
-        #svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-aliyundrive-fuse feeds/glinet/luci-app-aliyundrive-fuse
+        svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-aliyundrive-fuse feeds/glinet/luci-app-aliyundrive-fuse
         svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-ramfree feeds/glinet/luci-app-ramfree
         svn co https://github.com/kiddin9/openwrt-packages/trunk/luci-app-zerotier feeds/glinet/luci-app-zerotier
         svn co https://github.com/coolsnowwolf/packages/trunk/net/zerotier feeds/glinet/zerotier
-        #svn co https://github.com/coolsnowwolf/packages/trunk/multimedia/aliyundrive-fuse feeds/glinet/aliyundrive-fuse
+        svn co https://github.com/coolsnowwolf/packages/trunk/multimedia/aliyundrive-fuse feeds/glinet/aliyundrive-fuse
         python3 setup.py -c config-wlan-ap-5.4.yml
         cd wlan-ap/openwrt
         svn checkout https://github.com/coolsnowwolf/lede/trunk/tools/ucl tools/ucl
@@ -59,10 +59,7 @@ jobs:
         echo "DISTRIB_DESCRIPTION='OpenWrt R22.7.1 '" >> package/base-files/files/etc/openwrt_release
         sed -i 's/192.168.1.1/192.168.8.1/' package/base-files/files/bin/config_generate
         sed -i 's/OpenWrt/AXT1800/' package/base-files/files/bin/config_generate
-        #sed -i 's/UTC/CST-8/' package/base-files/files/bin/config_generate
         ./scripts/gen_config.py target_wlan_ap-gl-axt1800-5-4 luci
-        #sed -i '/set wireless.radio${devidx}.disabled/d' package/kernel/mac80211/files/lib/wifi/mac80211.sh   ##默认开启WIFI
-        #sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile  ##更换默认主题
         #rm -rf feeds/liuran001_packages/luci-theme-argon
         echo -e "$(nproc) thread compile" ##action一般是二线程，所以比较慢些
         make -j$(nproc) || make -j1 || make -j1 V=s
